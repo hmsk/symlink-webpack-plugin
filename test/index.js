@@ -7,32 +7,52 @@ import fse from 'fs-extra'
 const SymlinkWebpackPlugin = require('./../dist/index');
 const testDir = path.resolve(__dirname, '../test_dist');
 
-const webpackOption = (plugin) => {
-  return {
+const webpackOption = (plugin, name) => {
+  let config = {
     entry: {
-      app: './test/helpers/main.js'
     },
     output: {
       path: testDir,
       filename: '[name].js'
     },
     plugins: [plugin]
-  }
+  };
+
+  // Reuse same webpack instance, updating entry.name manually
+  config.entry[name] = path.resolve(__dirname, './helpers/main.js');
+  config.output.filename = name + '.js';
+  return config;
 };
 
-context('With typical setting', () => {
+describe('SymlinkWebpackPlugin', () => {
   beforeEach((done) => fse.remove(testDir, (err) => done()));
 
-  const typical = new SymlinkWebpackPlugin([
-    { origin: 'app.js', symlink: 'symlink.js' }
-  ]);
+  context('Configure with array', () => {
+    const asArray = new SymlinkWebpackPlugin([
+      { origin: 'withArray.js', symlink: 'symlink.js' }
+    ]);
 
+    it('should make symbolic link', (done) => {
+      webpack(webpackOption(asArray, 'withArray')).run((err, stats) => {
+        expect(fs.readlinkSync(testDir + '/symlink.js')).to.eq('withArray.js');
+        expect(fs.lstatSync(testDir + '/symlink.js').isSymbolicLink()).to.be.true;
+        done();
+      });
+    });
+  });
 
-  it('should make symbolic link', (done) => {
-    webpack(webpackOption(typical)).run((err, stats) => {
-      expect(fs.readlinkSync(testDir + '/symlink.js')).to.eq('app.js');
-      expect(fs.lstatSync(testDir + '/symlink.js').isSymbolicLink()).to.be.true;
-      done();
+  context('Configure without array', () => {
+    const nonArray = new SymlinkWebpackPlugin(
+      { origin: 'noArray.js', symlink: 'symlink.js' }
+    );
+
+    it('should make symbolic link', (done) => {
+      webpack(webpackOption(nonArray, 'noArray')).run((err, stats) => {
+        console.log(stats.compilation);
+        expect(fs.readlinkSync(testDir + '/symlink.js')).to.eq('noArray.js');
+        expect(fs.lstatSync(testDir + '/symlink.js').isSymbolicLink()).to.be.true;
+        done();
+      });
     });
   });
 });

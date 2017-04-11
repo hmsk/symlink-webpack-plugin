@@ -1,8 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-function SymlinkWebpackPlugin (options = []) {
-  // options: [{origin: symlink:}, {} ...]
+function SymlinkWebpackPlugin (config = []) {
+
+  let options;
+  if (config instanceof Array) {
+    options = config;
+  } else {
+    options = [config];
+  }
 
   const apply = (compiler) => {
     compiler.plugin('after-emit', (compilation, callback) => {
