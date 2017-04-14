@@ -6,10 +6,16 @@ import fse from 'fs-extra'
 
 const SymlinkWebpackPlugin = require('./../dist/index');
 const testDir = path.resolve(__dirname, '../test_dist');
+const entryFile = path.resolve(__dirname, './helpers/main.js');
 
-const webpackOption = (plugin, name) => {
-  let config = {
+const removeWorkingDir = (done) => {
+  fse.remove(testDir, (err) => done());
+};
+
+const webpackOption = (plugin) => {
+  return {
     entry: {
+      app: entryFile
     },
     output: {
       path: testDir,
@@ -17,25 +23,21 @@ const webpackOption = (plugin, name) => {
     },
     plugins: [plugin]
   };
-
-  // Reuse same webpack instance, updating entry.name manually
-  config.entry[name] = path.resolve(__dirname, './helpers/main.js');
-  config.output.filename = name + '.js';
-  return config;
 };
 
 describe('SymlinkWebpackPlugin', () => {
-  beforeEach((done) => fse.remove(testDir, (err) => done()));
+  beforeEach(removeWorkingDir);
+  afterEach(removeWorkingDir);
 
   context('Configure with array', () => {
-    const asArray = new SymlinkWebpackPlugin([
-      { origin: 'withArray.js', symlink: 'symlink.js' }
-    ]);
+    const asArray = new SymlinkWebpackPlugin(
+      [{ origin: 'app.js', symlink: 'symlink.js' }]
+    );
 
     it('should make symbolic link', (done) => {
-      webpack(webpackOption(asArray, 'withArray')).run((err, stats) => {
-        expect(fs.readlinkSync(testDir + '/symlink.js')).to.eq('withArray.js');
+      webpack(webpackOption(asArray)).run((err, stats) => {
         expect(fs.lstatSync(testDir + '/symlink.js').isSymbolicLink()).to.be.true;
+        expect(fs.readlinkSync(testDir + '/symlink.js')).to.eq('app.js');
         done();
       });
     });
@@ -43,14 +45,13 @@ describe('SymlinkWebpackPlugin', () => {
 
   context('Configure without array', () => {
     const nonArray = new SymlinkWebpackPlugin(
-      { origin: 'noArray.js', symlink: 'symlink.js' }
+      { origin: 'app.js', symlink: 'symlinkByNoArray.js' }
     );
 
     it('should make symbolic link', (done) => {
-      webpack(webpackOption(nonArray, 'noArray')).run((err, stats) => {
-        console.log(stats.compilation);
-        expect(fs.readlinkSync(testDir + '/symlink.js')).to.eq('noArray.js');
-        expect(fs.lstatSync(testDir + '/symlink.js').isSymbolicLink()).to.be.true;
+      webpack(webpackOption(nonArray)).run((err, stats) => {
+        expect(fs.lstatSync(testDir + '/symlinkByNoArray.js').isSymbolicLink()).to.be.true;
+        expect(fs.readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq('app.js');
         done();
       });
     });
