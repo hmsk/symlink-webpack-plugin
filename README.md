@@ -18,15 +18,27 @@ var SymlinkWebpackPlugin = require('symlink-webpack-plugin');
 // In plugins property
 {
   plugins: [
-    new SymlinkWebpackPlugin([
-      { origin: 'index.html', symlink: '200.html' }
-    ])
+    new SymlinkWebpackPlugin({ origin: 'index.html', symlink: '200.html' })
   ]
 }
 ```
 
 This setting makes symbolic link file `[ouput_path]/200.html` to `[ouput_path]/index.html`.
 By the way, this setting works well for [client-side routing on surge.sh](https://surge.sh/help/adding-a-200-page-for-client-side-routing).
+
+#### You can give configurations as Array
+
+```js
+{
+  plugins: [
+    new SymlinkWebpackPlugin([
+      { origin: 'index.html', symlink: '200.html' },
+      { origin: 'index.html', symlink: '404.html' },
+    ])
+  ]
+}
+```
+
 
 ### Development
 
