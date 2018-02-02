@@ -17,7 +17,7 @@ function SymlinkWebpackPlugin (config = []) {
         const originPath = path.join(outputPath, option.origin);
 
         if (fs.existsSync(originPath)) {
-          const baseDir = __dirname;
+          const baseDir = process.cwd();
           process.chdir(outputPath);
           const symlink = path.join(outputPath, option.symlink);
           const origin = path.relative(path.dirname(symlink), originPath);
