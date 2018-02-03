@@ -56,4 +56,16 @@ describe('SymlinkWebpackPlugin', () => {
       });
     });
   });
+
+  it('should not pollute process.cwd()', (done) => {
+      const cwd = process.cwd();
+
+      const plugin = new SymlinkWebpackPlugin(
+        [{ origin: 'app.js', symlink: 'symlink.js' }]
+      );
+      webpack(webpackOption(plugin)).run((err, stats) => {
+        expect(process.cwd()).to.eq(cwd);
+        done();
+      });
+  });
 });
