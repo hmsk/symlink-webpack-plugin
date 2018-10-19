@@ -22,7 +22,11 @@ function SymlinkWebpackPlugin (config = [], force = false) {
           const symlink = path.join(outputPath, option.symlink);
           const origin = path.relative(path.dirname(symlink), originPath);
 
-          if (fs.existsSync(symlink)) fs.unlinkSync(symlink);
+            if (force) {
+                fs.unlinkSync(symlink);
+            } else {
+                if (fs.existsSync(symlink)) fs.unlinkSync(symlink);
+            }
           fs.symlinkSync(origin, symlink);
 
           process.chdir(baseDir);
