@@ -15,15 +15,21 @@ function SymlinkWebpackPlugin (config = []) {
       const makeSymlinks = (option) => {
         const outputPath = compiler.options.output.path;
         const originPath = path.join(outputPath, option.origin);
-
-        if (fs.existsSync(originPath)) {
+ 
+        if (option.force || fs.existsSync(originPath)) {
           const baseDir = process.cwd();
           process.chdir(outputPath);
           const symlink = path.join(outputPath, option.symlink);
           const origin = path.relative(path.dirname(symlink), originPath);
 
-          if (fs.existsSync(symlink)) fs.unlinkSync(symlink);
-          fs.symlinkSync(origin, symlink);
+          try {
+            fs.readlinkSync(symlink); // Raises if symlink doesn't exist
+            fs.unlinkSync(symlink);
+          } catch (e) {
+            // symlink doesn't exist
+          } finally {
+            fs.symlinkSync(origin, symlink);
+          }
 
           process.chdir(baseDir);
         }

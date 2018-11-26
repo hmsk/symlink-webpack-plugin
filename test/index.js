@@ -55,6 +55,18 @@ describe('SymlinkWebpackPlugin', () => {
         done();
       });
     });
+
+    it('should remove existing link', (done) => {
+      fs.mkdirSync(testDir);
+      fs.symlinkSync('unknown.js', testDir + '/symlinkByNoArray.js');
+      expect(fs.readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq('unknown.js');
+
+      webpack(webpackOption(nonArray)).run((err, stats) => {
+        expect(fs.lstatSync(testDir + '/symlinkByNoArray.js').isSymbolicLink()).to.be.true;
+        expect(fs.readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq('app.js');
+        done();
+      });
+    });
   });
 
   it('should not pollute process.cwd()', (done) => {
@@ -67,5 +79,31 @@ describe('SymlinkWebpackPlugin', () => {
         expect(process.cwd()).to.eq(cwd);
         done();
       });
+  });
+
+  context('force option is true', () => {
+    const config = new SymlinkWebpackPlugin(
+      { origin: 'missing.js', symlink: 'forcedForMissing.js', force: true }
+    );
+
+    it('should make symbolic link even if the destiantion doesn not existed', (done) => {
+      webpack(webpackOption(config)).run((err, stats) => {
+        expect(fs.lstatSync(testDir + '/forcedForMissing.js').isSymbolicLink()).to.be.true;
+        expect(fs.existsSync(testDir + '/missing.js')).to.eq(false);
+        expect(fs.readlinkSync(testDir + '/forcedForMissing.js')).to.eq('missing.js');
+        done();
+      });
+    });
+
+    it('should remove existing link', () => {
+      fs.mkdirSync(testDir);
+      fs.symlinkSync('app.js', testDir + '/forcedForMissing.js');
+      expect(fs.readlinkSync(testDir + '/forcedForMissing.js')).to.eq('app.js');
+
+      webpack(webpackOption(config)).run((err, stats) => {
+        expect(fs.readlinkSync(testDir + '/forcedForMissing.js')).to.eq('missing.js');
+        done();
+      });
+    });
   });
 });
