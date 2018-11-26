@@ -39,6 +39,15 @@ By the way, this setting works well for [client-side routing on surge.sh](https:
 }
 ```
 
+#### `force` option (default: `false`)
+
+```js
+{ origin: 'index.html', symlink: '200.html', force: true },
+```
+
+The plugin doesn't the make symlink if the destination doesn't exist as default.
+By giving `force: true`, make the symlink always.
+
 
 ### Development
 
