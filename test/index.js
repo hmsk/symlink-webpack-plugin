@@ -1,10 +1,10 @@
-import { expect } from 'chai';
-import webpack from 'webpack';
-import path from 'path';
-import fs from 'fs';
-import fse from 'fs-extra'
+const { expect } = require('chai');
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
+const fse = require('fs-extra');
 
-const SymlinkWebpackPlugin = require('./../dist/index');
+const SymlinkWebpackPlugin = require('./../index');
 const testDir = path.resolve(__dirname, '../test_dist');
 const entryFile = path.resolve(__dirname, './helpers/main.js');
 

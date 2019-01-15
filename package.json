@@ -11,13 +11,9 @@
     "plugin"
   ],
   "scripts": {
-    "build": "$(yarn bin)/babel src/ --out-dir dist/",
-    "test": "$(yarn bin)/mocha --compilers js:babel-core/register"
+    "test": "$(yarn bin)/mocha"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.24.0",
-    "babel-preset-es2015": "^6.24.0",
     "chai": "^3.5.0",
     "fs-extra": "^2.1.2",
     "mocha": "^3.2.0",
