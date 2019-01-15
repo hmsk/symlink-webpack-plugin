@@ -14,7 +14,7 @@
     "test": "$(yarn bin)/mocha"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "4.2.0",
     "fs-extra": "^2.1.2",
     "mocha": "^3.2.0",
     "webpack": "^2.3.3"
