@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 function SymlinkWebpackPlugin (config = []) {
-
   let options;
   if (config instanceof Array) {
     options = config;
@@ -15,7 +14,7 @@ function SymlinkWebpackPlugin (config = []) {
       const makeSymlinks = (option) => {
         const outputPath = compiler.options.output.path;
         const originPath = path.join(outputPath, option.origin);
- 
+
         if (option.force || fs.existsSync(originPath)) {
           const baseDir = process.cwd();
           process.chdir(outputPath);
