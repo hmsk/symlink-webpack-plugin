@@ -1,6 +1,8 @@
 ## Symlink Webpack Plugin
 
-A webpack plugin that make symbolic link for emitted file.
+[![](https://img.shields.io/npm/v/symlink-webpack-plugin.svg?style=for-the-badge)](https://www.npmjs.com/package/symlink-webpack-plugin)
+
+A webpack plugin to make symbolic links for emitted file.
 
 ### Installation
 
