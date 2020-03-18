@@ -17,12 +17,12 @@ In your webpack config:
 ```js
 const SymlinkWebpackPlugin = require('symlink-webpack-plugin');
 
-// In plugins property
-{
+module.exports = {
+  // ...etc
   plugins: [
     new SymlinkWebpackPlugin({ origin: 'index.html', symlink: '200.html' })
   ]
-}
+};
 ```
 
 This setting makes symbolic link file `[ouput_path]/200.html` to `[ouput_path]/index.html`.
@@ -31,20 +31,33 @@ By the way, this setting works well for [client-side routing on surge.sh](https:
 ### You can give configurations as Array
 
 ```js
-{
+const SymlinkWebpackPlugin = require('symlink-webpack-plugin');
+
+module.exports = {
+  // ...etc
   plugins: [
     new SymlinkWebpackPlugin([
       { origin: 'index.html', symlink: '200.html' },
       { origin: 'index.html', symlink: '404.html' },
     ])
   ]
-}
+};
 ```
 
 ### `force` option (default: `false`)
 
 ```js
-{ origin: 'index.html', symlink: '200.html', force: true },
+const SymlinkWebpackPlugin = require('symlink-webpack-plugin');
+
+module.exports = {
+  // ...etc
+  plugins: [
+    new SymlinkWebpackPlugin([
+      { origin: 'index.html', symlink: '200.html', force: true },
+      { origin: 'index.html', symlink: '404.html' },
+    ])
+  ]
+};
 ```
 
 The plugin doesn't make the symlink if the destination doesn't exist as default.

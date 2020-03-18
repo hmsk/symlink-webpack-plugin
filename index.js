@@ -15,8 +15,7 @@ class SymlinkWebpackPlugin {
 
     hooks.afterEmit.tapAsync('Symlink', (compilation, done) => {
       this.targets.forEach(target => {
-        let origin,
-          symlink;
+        let origin, symlink;
         const originPath = join(outputPath, target.origin);
         const baseDir = process.cwd();
 
