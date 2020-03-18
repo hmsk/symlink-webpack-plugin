@@ -7,7 +7,7 @@ A webpack plugin to make symbolic links for emitted file.
 ## Installation
 
 ```bash
-$ npm i -D symlink-webpack-plugin
+npm i -D symlink-webpack-plugin
 ```
 
 ## Usage
@@ -47,16 +47,15 @@ By the way, this setting works well for [client-side routing on surge.sh](https:
 { origin: 'index.html', symlink: '200.html', force: true },
 ```
 
-The plugin doesn't the make symlink if the destination doesn't exist as default.
-By giving `force: true`, make the symlink always.
+The plugin doesn't make the symlink if the destination doesn't exist as default.
+Passing the option `force: true`, will create it regardless.
 
 
 ## Development
 
 ```bash
-$ yarn
-$ yarn build
-$ yarn test
+yarn
+yarn test
 ```
 
 ## License
