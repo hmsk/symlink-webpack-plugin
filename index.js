@@ -1,47 +1,45 @@
-const fs = require('fs');
-const path = require('path');
+const { existsSync, readlinkSync, symlinkSync, unlinkSync } = require('fs');
+const { dirname, join, relative } = require('path');
 
-function SymlinkWebpackPlugin (config = []) {
-  let options;
-  if (config instanceof Array) {
-    options = config;
-  } else {
-    options = [config];
+class SymlinkWebpackPlugin {
+  constructor(config = []) {
+    if (config instanceof Array) {
+      this.targets = config;
+    } else {
+      this.targets = [config];
+    }
   }
 
-  const apply = (compiler) => {
-    compiler.plugin('after-emit', (compilation, callback) => {
-      const makeSymlinks = (option) => {
-        const outputPath = compiler.options.output.path;
-        const originPath = path.join(outputPath, option.origin);
+  apply({ hooks, options }) {
+    const outputPath = options.output.path;
 
-        if (option.force || fs.existsSync(originPath)) {
-          const baseDir = process.cwd();
+    hooks.afterEmit.tapAsync('Symlink', (compilation, done) => {
+      this.targets.forEach(target => {
+        let origin, symlink;
+        const originPath = join(outputPath, target.origin);
+        const baseDir = process.cwd();
+
+        if (target.force || existsSync(originPath)) {
           process.chdir(outputPath);
-          const symlink = path.join(outputPath, option.symlink);
-          const origin = path.relative(path.dirname(symlink), originPath);
+          symlink = join(outputPath, target.symlink);
+          origin = relative(dirname(symlink), originPath);
 
           try {
-            fs.readlinkSync(symlink); // Raises if symlink doesn't exist
-            fs.unlinkSync(symlink);
+            readlinkSync(symlink); // Raises if symlink doesn't exist
+            unlinkSync(symlink);
           } catch (e) {
             // symlink doesn't exist
           } finally {
-            fs.symlinkSync(origin, symlink);
+            symlinkSync(origin, symlink);
           }
 
           process.chdir(baseDir);
         }
-      };
+      });
 
-      options.forEach(makeSymlinks);
-      callback();
+      done();
     });
-  };
-
-  return {
-    apply
-  };
+  }
 }
 
 module.exports = SymlinkWebpackPlugin;

@@ -11,15 +11,16 @@
     "plugin"
   ],
   "scripts": {
-    "test": "$(yarn bin)/mocha"
+    "test": "mocha"
   },
   "devDependencies": {
     "chai": "4.2.0",
-    "fs-extra": "7.0.1",
-    "mocha": "5.2.0",
-    "webpack": "3.12.0"
+    "fs-extra": "^8.1.0",
+    "mocha": "^7.1.0",
+    "webpack": "^4.42.0"
   },
   "contributors": [
-    "Matt Mulder <muldmatt@gmail.com>"
+    "Matt Mulder <muldmatt@gmail.com>",
+    "Aki Rose <hi@akiro.se>"
   ]
 }
