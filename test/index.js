@@ -1,11 +1,5 @@
 const { resolve } = require('path');
-const {
-  existsSync,
-  lstatSync,
-  mkdirSync,
-  readlinkSync,
-  symlinkSync
-} = require('fs');
+const { existsSync, lstatSync, mkdirSync, readlinkSync, symlinkSync } = require('fs');
 const { expect } = require('chai');
 const webpack = require('webpack');
 const { remove } = require('fs-extra');
@@ -34,9 +28,7 @@ describe('SymlinkWebpackPlugin', () => {
   afterEach(removeWorkingDir);
 
   context('Configure with array', () => {
-    const asArray = new SymlinkWebpackPlugin([
-      { origin: 'app.js', symlink: 'symlink.js' }
-    ]);
+    const asArray = new SymlinkWebpackPlugin([{ origin: 'app.js', symlink: 'symlink.js' }]);
 
     it('should make symbolic link', done => {
       webpack(webpackOption(asArray), () => {
@@ -55,8 +47,7 @@ describe('SymlinkWebpackPlugin', () => {
 
     it('should make symbolic link', done => {
       webpack(webpackOption(nonArray), () => {
-        expect(lstatSync(testDir + '/symlinkByNoArray.js').isSymbolicLink()).to
-          .be.true;
+        expect(lstatSync(testDir + '/symlinkByNoArray.js').isSymbolicLink()).to.be.true;
         expect(readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq('app.js');
         done();
       });
@@ -65,13 +56,10 @@ describe('SymlinkWebpackPlugin', () => {
     it('should remove existing link', done => {
       mkdirSync(testDir);
       symlinkSync('unknown.js', testDir + '/symlinkByNoArray.js');
-      expect(readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq(
-        'unknown.js'
-      );
+      expect(readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq('unknown.js');
 
       webpack(webpackOption(nonArray), () => {
-        expect(lstatSync(testDir + '/symlinkByNoArray.js').isSymbolicLink()).to
-          .be.true;
+        expect(lstatSync(testDir + '/symlinkByNoArray.js').isSymbolicLink()).to.be.true;
         expect(readlinkSync(testDir + '/symlinkByNoArray.js')).to.eq('app.js');
         done();
       });
@@ -81,9 +69,7 @@ describe('SymlinkWebpackPlugin', () => {
   it('should not pollute process.cwd()', done => {
     const cwd = process.cwd();
 
-    const plugin = new SymlinkWebpackPlugin([
-      { origin: 'app.js', symlink: 'symlink.js' }
-    ]);
+    const plugin = new SymlinkWebpackPlugin([{ origin: 'app.js', symlink: 'symlink.js' }]);
     webpack(webpackOption(plugin), () => {
       expect(process.cwd()).to.eq(cwd);
       done();
@@ -99,12 +85,9 @@ describe('SymlinkWebpackPlugin', () => {
 
     it('should make symbolic link even if the destination does not exist', done => {
       webpack(webpackOption(config), () => {
-        expect(lstatSync(testDir + '/forcedForMissing.js').isSymbolicLink()).to
-          .be.true;
+        expect(lstatSync(testDir + '/forcedForMissing.js').isSymbolicLink()).to.be.true;
         expect(existsSync(testDir + '/missing.js')).to.eq(false);
-        expect(readlinkSync(testDir + '/forcedForMissing.js')).to.eq(
-          'missing.js'
-        );
+        expect(readlinkSync(testDir + '/forcedForMissing.js')).to.eq('missing.js');
         done();
       });
     });
@@ -115,9 +98,7 @@ describe('SymlinkWebpackPlugin', () => {
       expect(readlinkSync(testDir + '/forcedForMissing.js')).to.eq('app.js');
 
       webpack(webpackOption(config), () => {
-        expect(readlinkSync(testDir + '/forcedForMissing.js')).to.eq(
-          'missing.js'
-        );
+        expect(readlinkSync(testDir + '/forcedForMissing.js')).to.eq('missing.js');
         done();
       });
     });
