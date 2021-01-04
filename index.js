@@ -13,7 +13,7 @@ class SymlinkWebpackPlugin {
   apply({ hooks, options }) {
     const outputPath = options.output.path;
 
-    hooks.entryOption.tap('Symlink', (context, entry) => {
+    hooks.entryOption.tap('Symlink', () => {
       this.targets.forEach(target => {
         let origin, symlink;
         const originPath = join(outputPath, target.origin);
