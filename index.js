@@ -13,7 +13,7 @@ class SymlinkWebpackPlugin {
   apply({ hooks, options }) {
     const outputPath = options.output.path;
 
-    hooks.afterEmit.tapAsync('Symlink', (compilation, done) => {
+    hooks.entryOption.tap('Symlink', (context, entry) => {
       this.targets.forEach(target => {
         let origin, symlink;
         const originPath = join(outputPath, target.origin);
@@ -36,8 +36,6 @@ class SymlinkWebpackPlugin {
           process.chdir(baseDir);
         }
       });
-
-      done();
     });
   }
 }
