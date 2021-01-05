@@ -1,4 +1,5 @@
 const { existsSync, readlinkSync, symlinkSync, unlinkSync } = require('fs');
+const { mkdirpSync } = require('fs-extra');
 const { dirname, join, relative } = require('path');
 
 class SymlinkWebpackPlugin {
@@ -12,9 +13,10 @@ class SymlinkWebpackPlugin {
 
   apply({ hooks, options }) {
     const outputPath = options.output.path;
+    mkdirpSync(outputPath);
 
     hooks.entryOption.tap('Symlink', () => {
-      this.targets.forEach(target => {
+      this.targets.forEach((target) => {
         let origin, symlink;
         const originPath = join(outputPath, target.origin);
         const baseDir = process.cwd();
