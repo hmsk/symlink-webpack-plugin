@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const webpack = require('webpack');
 const { remove } = require('fs-extra');
 
-const SymlinkWebpackPlugin = require('./../index');
+const SymlinkWebpackPlugin = require('../index');
 const testDir = resolve(__dirname, '../test_dist');
 const entryFile = resolve(__dirname, './helpers/main.js');
 
