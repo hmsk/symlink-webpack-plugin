@@ -1,13 +1,25 @@
 const { existsSync, readlinkSync, symlinkSync, unlinkSync } = require('fs');
 const { dirname, join, relative } = require('path');
 
+/*
+  target: { origin: string, symlink: string, force: boolean = false, hook: string = 'afterEmit' }
+*/
 class SymlinkWebpackPlugin {
   constructor(config = []) {
-    if (config instanceof Array) {
-      this.targets = config;
-    } else {
-      this.targets = [config];
-    }
+    const configs = (config instanceof Array ? config : [config]).map(c => ({
+      force: false,
+      hook: 'afterEmit',
+      ...c
+    }));
+
+    this.configsPerHook = configs.reduce((perHook, config) => {
+      if (perHook[config.hook]) {
+        perHook[config.hook].push(config)
+      } else {
+        perHook[config.hook] = [config]
+      }
+      return perHook
+    }, {})
   }
 
   apply({ hooks, options }) {
@@ -35,8 +47,10 @@ class SymlinkWebpackPlugin {
       }
     };
 
-    hooks.afterEmit.tap('Symlink', () => {
-      this.targets.forEach(makeSymbolicLink);
+    Object.entries(this.configsPerHook).forEach(([hook, configs]) => {
+      hooks[hook].tap(`SymlinkWebpackPlugin on ${hook}`, () => {
+        configs.forEach(makeSymbolicLink);
+      });
     });
   }
 }
