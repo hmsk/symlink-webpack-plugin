@@ -1,4 +1,5 @@
 const { existsSync, readlinkSync, symlinkSync, unlinkSync } = require('fs');
+const { mkdirpSync } = require('fs-extra');
 const { dirname, join, relative } = require('path');
 
 /*
@@ -6,20 +7,20 @@ const { dirname, join, relative } = require('path');
 */
 class SymlinkWebpackPlugin {
   constructor(config = []) {
-    const configs = (config instanceof Array ? config : [config]).map(c => ({
+    const configs = (config instanceof Array ? config : [config]).map((c) => ({
       force: false,
       hook: 'afterEmit',
-      ...c
+      ...c,
     }));
 
     this.configsPerHook = configs.reduce((perHook, config) => {
       if (perHook[config.hook]) {
-        perHook[config.hook].push(config)
+        perHook[config.hook].push(config);
       } else {
-        perHook[config.hook] = [config]
+        perHook[config.hook] = [config];
       }
-      return perHook
-    }, {})
+      return perHook;
+    }, {});
   }
 
   apply({ hooks, options }) {
@@ -29,6 +30,7 @@ class SymlinkWebpackPlugin {
       const originPath = join(outputPath, target.origin);
 
       if (target.force || existsSync(originPath)) {
+        mkdirpSync(outputPath);
         const baseDir = process.cwd();
         process.chdir(outputPath);
         const symlink = join(outputPath, target.symlink);
