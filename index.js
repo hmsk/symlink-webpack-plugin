@@ -13,31 +13,30 @@ class SymlinkWebpackPlugin {
   apply({ hooks, options }) {
     const outputPath = options.output.path;
 
-    hooks.afterEmit.tapAsync('Symlink', (compilation, done) => {
-      this.targets.forEach(target => {
-        let origin, symlink;
-        const originPath = join(outputPath, target.origin);
+    const makeSymbolicLink = (target) => {
+      const originPath = join(outputPath, target.origin);
+
+      if (target.force || existsSync(originPath)) {
         const baseDir = process.cwd();
+        process.chdir(outputPath);
+        const symlink = join(outputPath, target.symlink);
+        const origin = relative(dirname(symlink), originPath);
 
-        if (target.force || existsSync(originPath)) {
-          process.chdir(outputPath);
-          symlink = join(outputPath, target.symlink);
-          origin = relative(dirname(symlink), originPath);
-
-          try {
-            readlinkSync(symlink); // Raises if symlink doesn't exist
-            unlinkSync(symlink);
-          } catch (e) {
-            // symlink doesn't exist
-          } finally {
-            symlinkSync(origin, symlink);
-          }
-
-          process.chdir(baseDir);
+        try {
+          readlinkSync(symlink); // Raises if symlink doesn't exist
+          unlinkSync(symlink);
+        } catch (e) {
+          // symlink doesn't exist
+        } finally {
+          symlinkSync(origin, symlink);
         }
-      });
 
-      done();
+        process.chdir(baseDir);
+      }
+    };
+
+    hooks.afterEmit.tap('Symlink', () => {
+      this.targets.forEach(makeSymbolicLink);
     });
   }
 }
