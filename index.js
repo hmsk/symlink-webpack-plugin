@@ -30,7 +30,7 @@ class SymlinkWebpackPlugin {
       const originPath = join(outputPath, target.origin);
 
       if (target.force || existsSync(originPath)) {
-        mkdirpSync(outputPath);
+        mkdirpSync(dirname(join(outputPath, target.symlink)));
         const baseDir = process.cwd();
         process.chdir(outputPath);
         const symlink = join(outputPath, target.symlink);
