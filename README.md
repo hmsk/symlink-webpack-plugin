@@ -61,8 +61,16 @@ module.exports = {
 };
 ```
 
-The plugin doesn't make the symlink if the destination doesn't exist as default.
-Passing the option `force: true`, will create it regardless.
+The plugin doesn't make any symlink if a directory for a destination doesn't exist as default.
+Passing an option `force: true`, will create it regardless.
+
+### `hook` option (default: `afterEmit`)
+
+You can point an exact [compiler hook](https://webpack.js.org/api/compiler-hooks/) to make a symlink.
+
+```js
+  { origin: 'index.html', symlink: '200.html', hook: 'entryOption' },
+```
 
 
 ## Development
