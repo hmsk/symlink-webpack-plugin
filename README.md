@@ -27,7 +27,6 @@ module.exports = {
 ```
 
 This setting makes symbolic link file `[ouput_path]/200.html` to `[ouput_path]/index.html`.
-By the way, this setting works well for [client-side routing on surge.sh](https://surge.sh/help/adding-a-200-page-for-client-side-routing).
 
 ### You can give configurations as Array
 
@@ -39,7 +38,7 @@ module.exports = {
   plugins: [
     new SymlinkWebpackPlugin([
       { origin: 'index.html', symlink: '200.html' },
-      { origin: 'index.html', symlink: '404.html' },
+      { origin: 'index.html', symlink: 'error_pages/404.html' },
     ])
   ]
 };
@@ -63,6 +62,8 @@ module.exports = {
 
 The plugin doesn't make any symlink if a directory for a destination doesn't exist as default.
 Passing an option `force: true`, will create it regardless.
+
+When directories of symlink don't exist, `force` option allows to dig. For instance, what if a config has `symlink: 'one/two/200.html'` but `one/two/` dir doesn't exist when the plugin runs, `one`, `one/two` directories will be created.
 
 ### `hook` option (default: `afterEmit`)
 
