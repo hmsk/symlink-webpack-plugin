@@ -82,4 +82,4 @@ yarn test
 
 ## License
 
-[MIT License](/LICENSE) / Copyright (c) hmsk <k.hamasaki@gmail.com>
+[MIT](/LICENSE)

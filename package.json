@@ -4,7 +4,7 @@
   "description": "Make symbolic links among your built files in webpack",
   "main": "index.js",
   "repository": "https://github.com/hmsk/symlink-webpack-plugin.git",
-  "author": "hmsk <k.hamasaki@gmail.com>",
+  "author": "Kengo Hamasaki <k.hamasaki@gmail.com>",
   "license": "MIT",
   "keywords": [
     "webpack",
