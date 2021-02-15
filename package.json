@@ -1,6 +1,6 @@
 {
   "name": "symlink-webpack-plugin",
-  "version": "1.1.0-beta.2",
+  "version": "1.1.0",
   "description": "Make symbolic links among your built files in webpack",
   "main": "index.js",
   "repository": "https://github.com/hmsk/symlink-webpack-plugin.git",
