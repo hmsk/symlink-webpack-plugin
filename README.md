@@ -3,7 +3,7 @@
 [![](https://img.shields.io/npm/v/symlink-webpack-plugin.svg?style=for-the-badge)](https://www.npmjs.com/package/symlink-webpack-plugin)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hmsk/symlink-webpack-plugin/Node%20CI?style=for-the-badge)](https://github.com/hmsk/symlink-webpack-plugin/actions?query=workflow%3A%22Node+CI%22)
 
-A webpack plugin to make symbolic links for emitted file.
+A webpack plugin to make symbolic links in output dir.
 
 ## Installation
 
