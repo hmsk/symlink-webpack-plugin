@@ -20,7 +20,7 @@
   "devDependencies": {
     "chai": "4.3.4",
     "mocha": "9.0.0",
-    "webpack": "5.21.2"
+    "webpack": "5.39.0"
   },
   "contributors": [
     "Matt Mulder <muldmatt@gmail.com>",
