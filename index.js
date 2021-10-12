@@ -42,7 +42,7 @@ class SymlinkWebpackPlugin {
         } catch (e) {
           // symlink doesn't exist
         } finally {
-          symlinkSync(origin, symlink);
+          symlinkSync(origin, symlink, 'junction');
         }
 
         process.chdir(baseDir);
